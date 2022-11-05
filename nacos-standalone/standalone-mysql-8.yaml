@@ -5,13 +5,13 @@ services:
     image: nacos/nacos-server:${NACOS_VERSION}
     container_name: nacos-standalone-mysql
     env_file:
-      - ../env/nacos-standlone-mysql.env
+      - ../env/nacos-standalone-mysql.env
     volumes:
       - ./standalone-logs/:/home/nacos/logs
     ports:
-      - "8848:8848"
-      - "9848:9848"
-      - "9555:9555"
+      - 8848:8848
+      - 9848:9848
+      - 9555:9555
     depends_on:
       mysql:
         condition: service_healthy
@@ -21,16 +21,14 @@ services:
     container_name: mysql
     build:
       context: .
-      dockerfile: ./image/mysql/8/Dockerfile
-      tags:
-        - "example/mysql:8.0.30"
-    image: example/mysql:8.0.30
+      dockerfile: ../image/mysql/8/Dockerfile
+    image: nacos-standalone/mysql:8.0.30
     env_file:
       - ../env/mysql.env
     volumes:
       - ./mysql:/var/lib/mysql
     ports:
-      - "3306:3306"
+      - 3306:3306
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
       interval: 5s

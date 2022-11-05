@@ -10,9 +10,9 @@ services:
       - ./standalone-logs/:/home/nacos/logs
       - ./init.d/custom.properties:/home/nacos/init.d/custom.properties
     ports:
-      - "8848:8848"
-      - "9848:9848"
-      - "9555:9555"
+      - 8848:8848
+      - 9848:9848
+      - 9555:9555
     depends_on:
       mysql:
         condition: service_healthy
@@ -22,10 +22,8 @@ services:
     container_name: mysql
     build:
       context: .
-      dockerfile: ./image/mysql/5.7/Dockerfile
-      tags:
-        - "example/mysql:5.7"
-    image: example/mysql:5.7
+      dockerfile: ../image/mysql/5.7/Dockerfile
+    image: nacos-standalone/mysql:5.7
     env_file:
       - ../env/mysql.env
     volumes:

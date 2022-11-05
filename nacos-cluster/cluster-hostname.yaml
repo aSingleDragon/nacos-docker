@@ -9,6 +9,7 @@ services:
       - ../build/conf/nginx-hostname.conf:/etc/nginx/nginx.conf
     ports:
       - 8848:80
+      - 9848:81
     restart: on-failure
 
   nacos1:
@@ -54,7 +55,7 @@ services:
     container_name: nacos-mysql-8
     build:
       context: .
-      dockerfile: ./image/mysql/8/Dockerfile
+      dockerfile: ../image/mysql/8/Dockerfile
     image: nacos/mysql:8
     env_file:
       - ../env/mysql.env
