@@ -1,5 +1,6 @@
 version: "2"
 services:
+
   nacos:
     image: nacos/nacos-server:${NACOS_VERSION}
     container_name: nacos-standalone
@@ -11,6 +12,7 @@ services:
     ports:
       - "8848:8848"
       - "9848:9848"
+
   prometheus:
     container_name: prometheus
     image: prom/prometheus:latest
@@ -21,6 +23,7 @@ services:
     depends_on:
       - nacos
     restart: on-failure
+
   grafana:
     container_name: grafana
     image: grafana/grafana:latest

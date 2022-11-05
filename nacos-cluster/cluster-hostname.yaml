@@ -1,15 +1,22 @@
 version: "3.8"
+
 services:
+  nginx:
+    hostname: nacos-cluster-nginx
+    image: nginx:latest
+    container_name: nacos-cluster-nginx
+    volumes:
+      - ../build/conf/nginx-hostname.conf:/etc/nginx/nginx.conf
+    ports:
+      - 8848:80
+    restart: on-failure
+
   nacos1:
-    hostname: nacos1
-    container_name: nacos1
+    hostname: nacos-1
+    container_name: nacos-1
     image: nacos/nacos-server:${NACOS_VERSION}
     volumes:
       - ./cluster-logs/nacos1:/home/nacos/logs
-    ports:
-      - "8848:8848"
-      - "9848:9848"
-      - "9555:9555"
     env_file:
       - ../env/nacos-hostname.env
     restart: always
@@ -18,49 +25,43 @@ services:
         condition: service_healthy
 
   nacos2:
-    hostname: nacos2
+    hostname: nacos-2
+    container_name: nacos-2
     image: nacos/nacos-server:${NACOS_VERSION}
-    container_name: nacos2
     volumes:
       - ./cluster-logs/nacos2:/home/nacos/logs
-    ports:
-      - "8849:8848"
-      - "9849:9848"
     env_file:
       - ../env/nacos-hostname.env
     restart: always
     depends_on:
       mysql:
         condition: service_healthy
+
   nacos3:
-    hostname: nacos3
+    hostname: nacos-3
+    container_name: nacos-3
     image: nacos/nacos-server:${NACOS_VERSION}
-    container_name: nacos3
     volumes:
       - ./cluster-logs/nacos3:/home/nacos/logs
-    ports:
-      - "8850:8848"
-      - "9850:9848"
     env_file:
       - ../env/nacos-hostname.env
     restart: always
     depends_on:
       mysql:
         condition: service_healthy
+
   mysql:
-    container_name: mysql
+    container_name: nacos-mysql-8
     build:
       context: .
-      dockerfile: ./image/mysql/5.7/Dockerfile
-      tags:
-        - "example/mysql:5.7"
-    image: example/mysql:5.7
+      dockerfile: ./image/mysql/8/Dockerfile
+    image: nacos/mysql:8
     env_file:
       - ../env/mysql.env
     volumes:
       - ./mysql:/var/lib/mysql
     ports:
-      - "3306:3306"
+      - 3307:3306
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
       interval: 5s
