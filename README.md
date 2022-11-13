@@ -54,7 +54,7 @@ Nacos-Docker是根据[Nacos](https://github.com/alibaba/nacos) Server的docker�
 * 集群模式
 
   ```powershell
-  docker-compose -f nacos-cluster/cluster-hostname.yaml up 
+  docker-compose -f nacos-cluster/ip-hostname.yaml up 
   ```
 
 
